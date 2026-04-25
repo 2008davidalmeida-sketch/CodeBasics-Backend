@@ -6,22 +6,31 @@ import { IUser } from '../models/User'
 export function handleGoogleCallback(req: Request, res: Response): void {
     const user = req.user as IUser
 
+    console.log('--- Handle Google Callback ---')
+    console.log('User found:', user._id)
+
     // Generate JWT token
     const token = jwt.sign(
-        { id: user._id, role: user.role },
+        { id: user._id.toString(), role: user.role },
         process.env.JWT_SECRET as string,
         { expiresIn: '7d' }
     )
 
+    const redirectUrl = `${process.env.CLIENT_URL}/auth/callback?token=${token}`
+    console.log('Redirecting to:', redirectUrl)
+
     // Redirect to client with token
-    res.redirect(`${process.env.CLIENT_URL}/auth/callback?token=${token}`)
+    res.redirect(redirectUrl)
 }
  
 export function getMe(req: Request, res: Response): void {
     const authHeader = req.headers.authorization
+    console.log('--- Get Me ---')
+    console.log('Auth Header:', authHeader)
 
     // check if token exists
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.log('Get Me - No token provided')
         res.status(401).json({ error: 'No token provided' })
         return
     }
@@ -32,10 +41,12 @@ export function getMe(req: Request, res: Response): void {
     try {
         // get user from token
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string }
+        console.log('Get Me - Token verified for user:', decoded.id)
         // return user
         res.json(decoded)
-    } catch {
+    } catch (error) {
         // if token is invalid, return error
+        console.error('Get Me - Token verification failed:', error)
         res.status(401).json({ error: 'Invalid token' })
     }
 }
