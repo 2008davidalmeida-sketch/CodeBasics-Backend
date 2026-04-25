@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose'
 export interface IUser extends Document {
     name: string
     email: string
+    photo?: string
     googleId: string
     role: 'student' | 'teacher'
     createdAt: Date
@@ -13,6 +14,7 @@ const UserSchema = new Schema<IUser>(
     {
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
+        photo: { type: String },
         googleId: { type: String, required: true, unique: true },
         role: { type: String, enum: ['student', 'teacher'], default: 'student' },
     },

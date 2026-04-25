@@ -23,30 +23,32 @@ export function handleGoogleCallback(req: Request, res: Response): void {
     res.redirect(redirectUrl)
 }
  
+import User from '../models/User'
+
 export function getMe(req: Request, res: Response): void {
     const authHeader = req.headers.authorization
     console.log('--- Get Me ---')
-    console.log('Auth Header:', authHeader)
-
-    // check if token exists
+    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        console.log('Get Me - No token provided')
         res.status(401).json({ error: 'No token provided' })
         return
     }
 
-    // verify token
     const token = authHeader.split(' ')[1]
 
     try {
-        // get user from token
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string }
-        console.log('Get Me - Token verified for user:', decoded.id)
-        // return user
-        res.json(decoded)
+        
+        // Fetch full user from database
+        User.findById(decoded.id).then(user => {
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' })
+            }
+            res.json(user)
+        }).catch(err => {
+            res.status(500).json({ error: 'Database error' })
+        })
     } catch (error) {
-        // if token is invalid, return error
-        console.error('Get Me - Token verification failed:', error)
         res.status(401).json({ error: 'Invalid token' })
     }
 }

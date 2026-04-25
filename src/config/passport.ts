@@ -22,24 +22,31 @@ passport.use(
                     return done(null, false)
                 }
 
+                // get photo from profile
+                const photo = profile.photos?.[0].value
+
                 // check if user exists
                 let user = await User.findOne({ googleId: profile.id })
-                console.log('Utilizador encontrado:', user)
 
-                // if user does not exist, create user
-                if (!user) {
-                    console.log('Utilizador não encontrado, a criar...')
+                if (user) {
+                    // Update photo if it has changed
+                    if (user.photo !== photo) {
+                        user.photo = photo
+                        await user.save()
+                    }
+                } else {
+                    // create user
                     user = await User.create({
-                    name: profile.displayName,
-                    email,
-                    googleId: profile.id,
-                    role: 'student',
-                })
-                console.log('Utilizador criado:', user)
+                        name: profile.displayName,
+                        email,
+                        photo,
+                        googleId: profile.id,
+                        role: 'student',
+                    })
                 }
 
                 // return user
-                return done(null, user)             
+                return done(null, user)
             } catch (error) {
                 // return error
                 console.error('Erro no passport:', error)
