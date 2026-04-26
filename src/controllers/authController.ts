@@ -5,10 +5,7 @@ import { IUser } from '../models/User'
 
 export function handleGoogleCallback(req: Request, res: Response): void {
     const user = req.user as IUser
-
-    console.log('--- Handle Google Callback ---')
-    console.log('User found:', user._id)
-
+    
     // Generate JWT token
     const token = jwt.sign(
         { id: user._id.toString(), role: user.role },
@@ -17,7 +14,6 @@ export function handleGoogleCallback(req: Request, res: Response): void {
     )
 
     const redirectUrl = `${process.env.CLIENT_URL}/auth/callback?token=${token}`
-    console.log('Redirecting to:', redirectUrl)
 
     // Redirect to client with token
     res.redirect(redirectUrl)

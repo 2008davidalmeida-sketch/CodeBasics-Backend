@@ -4,15 +4,22 @@ import { handleGoogleCallback, getMe, logout } from '../controllers/authControll
 
 const router = Router()
 
-// Google OAuth routes
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
+// redirect to Google login page
+const redirectToGoogle = passport.authenticate('google', { 
+    scope: ['profile', 'email'] 
+})
 
-// Google OAuth callback routes
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=unauthorized` }),
-  handleGoogleCallback
-)
+//  process the response from Google
+const processGoogleCallback = passport.authenticate('google', { 
+    session: false, 
+    failureRedirect: `${process.env.CLIENT_URL}/login?error=unauthorized` 
+})
+
+// get current user info
+router.get('/google', redirectToGoogle)
+
+// handle Google callback and redirect to client with token
+router.get('/google/callback', processGoogleCallback, handleGoogleCallback)
 
 // Get current user route
 router.get('/me', getMe)
