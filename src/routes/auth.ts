@@ -19,7 +19,16 @@ const processGoogleCallback = passport.authenticate('google', {
 router.get('/google', redirectToGoogle)
 
 // handle Google callback and redirect to client with token
-router.get('/google/callback', processGoogleCallback, handleGoogleCallback)
+router.get(
+    '/google/callback',
+    (req, res, next) => {
+        passport.authenticate('google', {
+            session: false,
+            failureRedirect: `${process.env.CLIENT_URL}/login?error=unauthorized`
+        })(req, res, next)
+    },
+    handleGoogleCallback
+)
 
 // Get current user route
 router.get('/me', getMe)

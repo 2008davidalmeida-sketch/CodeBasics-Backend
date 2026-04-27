@@ -28,6 +28,24 @@ export function getChallenge(req: Request, res: Response): void {
 export function createChallenge(req: AuthRequest, res: Response): void {
     const { title, description, topic, order, starterCode } = req.body
 
+    // validate required fields
+    if (!title || !description || !topic || !order) {
+        res.status(400).json({ error: 'title, description, topic and order are required' })
+        return
+    }
+
+     // validate types
+    if (typeof title !== 'string' || typeof description !== 'string' || typeof topic !== 'string') {
+        res.status(400).json({ error: 'title, description and topic must be strings' })
+        return
+    }
+
+    if (typeof order !== 'number') {
+        res.status(400).json({ error: 'order must be a number' })
+        return
+    }
+
+    // create challenge in database
     Challenge.create({
         title,
         description,
@@ -42,18 +60,40 @@ export function createChallenge(req: AuthRequest, res: Response): void {
 
 // update a challenge
 export function updateChallenge(req: Request, res: Response): void {
+    const { title, description, topic, order } = req.body
+
+    // validate types if fields are present
+    if (title && typeof title !== 'string') {
+        res.status(400).json({ error: 'title must be a string' })
+        return
+    }
+
+    if (description && typeof description !== 'string') {
+        res.status(400).json({ error: 'description must be a string' })
+        return
+    }
+
+    if (topic && typeof topic !== 'string') {
+        res.status(400).json({ error: 'topic must be a string' })
+        return
+    }
+
+    if (order && typeof order !== 'number') {
+        res.status(400).json({ error: 'order must be a number' })
+        return
+    }
+
+    // update challenge in database
     Challenge.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(challenge => {
-        
-        // check if challenge was found
-        if (!challenge) {
-            res.status(404).json({ error: 'Challenge not found' })
-            return
-        }
-        res.json(challenge)
+            if (!challenge) {
+                res.status(404).json({ error: 'Challenge not found' })
+                return
+            }
+            res.json(challenge)
         })
         .catch(() => res.status(500).json({ error: 'Failed to update challenge' }))
-    }
+}
 
 // delete a challenge
 export function deleteChallenge(req: Request, res: Response): void {

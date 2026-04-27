@@ -10,15 +10,16 @@ passport.use(
         callbackURL: '/auth/google/callback',
         },
         async (accessToken, refreshToken, profile, done) => {
+            console.log('Passport strategy running')
             try {
                 // get email from profile
                 const email = profile.emails?.[0].value
-                console.log('Passport Strategy - Email:', email)
-                console.log('Passport Strategy - Expected Domain:', process.env.ALLOWED_EMAIL_DOMAIN)
+                console.log('Email:', email)
+                console.log('Domain check:', email?.endsWith(process.env.ALLOWED_EMAIL_DOMAIN as string))
+                console.log('ALLOWED_EMAIL_DOMAIN:', process.env.ALLOWED_EMAIL_DOMAIN)
 
                 // check if email is valid
                 if (!email || !email.endsWith(process.env.ALLOWED_EMAIL_DOMAIN as string)) {
-                    console.log('Passport Strategy - Domain mismatch or missing email!')
                     return done(null, false)
                 }
 
@@ -49,7 +50,6 @@ passport.use(
                 return done(null, user)
             } catch (error) {
                 // return error
-                console.error('Erro no passport:', error)
                 return done(error, false)
             }
         }

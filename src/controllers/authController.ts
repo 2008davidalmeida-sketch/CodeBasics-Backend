@@ -4,6 +4,8 @@ import { IUser } from '../models/User'
 
 
 export function handleGoogleCallback(req: Request, res: Response): void {
+    console.log('handleGoogleCallback called')
+    console.log('req.user:', req.user)
     const user = req.user as IUser
     
     // Generate JWT token
@@ -23,7 +25,6 @@ import User from '../models/User'
 
 export function getMe(req: Request, res: Response): void {
     const authHeader = req.headers.authorization
-    console.log('--- Get Me ---')
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         res.status(401).json({ error: 'No token provided' })

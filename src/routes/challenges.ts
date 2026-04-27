@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { getChallenges, getChallenge, createChallenge, updateChallenge, deleteChallenge } from '../controllers/challengeController'
-import { verifyToken } from '../middleware/auth'
+import { verifyToken, verifyRole } from '../middleware/auth'
 
 const router = Router()
 
@@ -8,11 +8,12 @@ const router = Router()
 router.get('/', getChallenges)
 // get a single challenge
 router.get('/:id', getChallenge)
+
 // create a new challenge
-router.post('/', verifyToken, createChallenge)
+router.post('/', verifyToken, verifyRole('teacher'), createChallenge)
 // update a challenge
-router.put('/:id', verifyToken, updateChallenge)
+router.put('/:id', verifyToken, verifyRole('teacher'), updateChallenge)
 // delete a challenge
-router.delete('/:id', verifyToken, deleteChallenge)
+router.delete('/:id', verifyToken, verifyRole('teacher'), deleteChallenge)
 
 export default router
