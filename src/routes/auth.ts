@@ -12,7 +12,7 @@ const redirectToGoogle = passport.authenticate('google', {
 //  process the response from Google
 const processGoogleCallback = passport.authenticate('google', { 
     session: false, 
-    failureRedirect: `${process.env.CLIENT_URL}/login?error=unauthorized` 
+    failureRedirect: `${process.env.CLIENT_URL}/nao-autorizado` 
 })
 
 // get current user info
@@ -24,7 +24,7 @@ router.get(
     (req, res, next) => {
         passport.authenticate('google', {
             session: false,
-            failureRedirect: `${process.env.CLIENT_URL}/login?error=unauthorized`
+            failureRedirect: `${process.env.CLIENT_URL}/nao-autorizado`
         })(req, res, next)
     },
     handleGoogleCallback

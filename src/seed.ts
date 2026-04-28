@@ -15,7 +15,7 @@ const challenges = [
     },
     {
         title: 'Variáveis e Tipos',
-        description: 'Declara variáveis dos tipos int, float, str e bool.',
+        description: 'Declara variáveis dos tipos integer, float, string e boolean.',
         topic: 'Programação',
         order: 2,
         starterCode: '# Declara as tuas variáveis aqui\n'
@@ -215,11 +215,10 @@ const challenges = [
 async function seed() {
     try {
         await mongoose.connect(process.env.MONGO_URI as string)
-        console.log('MongoDB connected')
 
         // clear existing challenges
         await Challenge.deleteMany({})
-        console.log('Existing challenges cleared')
+        
 
         // insert all challenges
         await Challenge.insertMany(challenges.map(c => ({
@@ -227,7 +226,7 @@ async function seed() {
             createdBy: new mongoose.Types.ObjectId()
         })))
 
-        console.log(`${challenges.length} challenges inserted successfully`)
+        
         process.exit(0)
     } catch (error) {
         console.error('Seed error:', error)
