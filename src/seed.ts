@@ -35,72 +35,58 @@ const challenges = [
         starterCode: 'a = 15\nb = 4\n\n# Realiza as operações aqui\n'
     },
     {
-        title: 'Operadores Lógicos e Relacionais',
-        description: 'Dados x = 10 e y = 5, avalia e imprime o resultado das seguintes expressões: x > y, x == y, x != y, x > 0 and y > 0, x > 20 or y > 0, not (x == y).',
+        title: 'Area de um quadrado',
+        description: 'Calcula a área de um quadrado dado o comprimento do lado introduzido pelo utilizador.',
         topic: 'Programação',
         order: 5,
-        starterCode: 'x = 10\ny = 5\n\n# Avalia as expressões aqui\n'
+        starterCode: '# Pede o comprimento do lado ao utilizador\n'
     },
     {
-        title: 'Prioridade de Operadores',
-        description: 'Calcula e imprime o resultado das seguintes expressões respeitando a prioridade dos operadores:\n1. 2 + 3 * 4\n2. (2 + 3) * 4\n3. 10 / 2 + 3 * 2\n4. 2 ** 3 + 1',
+        title: 'Area de uma triangulo e de um circulo',
+        description: 'Calcula e imprime o resultado da área de um triângulo e de um círculo. Para o triângulo, pede a base e a altura ao utilizador. Para o círculo, pede o raio ao utilizador.',
         topic: 'Programação',
         order: 6,
-        starterCode: '# Calcula cada expressão e imprime o resultado\n'
+        starterCode: '# Pede os valores ao utilizador\n\n\n# Calcula as áreas aqui\n'
     },
 
     // Tópico 2 — Tipos de Dados Compostos
     {
         title: 'Criar Listas',
-        description: 'Cria uma lista com os nomes de 5 frutas. Imprime a lista completa, o primeiro elemento, o último elemento e o número de elementos.',
+        description: 'Cria uma lista com os nomes de 5 colegas teus. Imprime a lista completa, o primeiro elemento, o último elemento e o número de elementos. A função len() pode ser útil para contar os elementos.',
         topic: 'Tipos de Dados Compostos',
         order: 7,
         starterCode: '# Cria a tua lista aqui\n'
     },
     {
         title: 'Operações com Listas',
-        description: 'Dada a lista numeros = [3, 1, 4, 1, 5, 9, 2, 6], realiza as seguintes operações:\n1. Adiciona o número 7 ao fim da lista\n2. Remove o número 1 (primeira ocorrência)\n3. Ordena a lista\n4. Imprime o número de elementos',
+        description: 'Dada a lista numeros = [3, 1, 4, 1, 5, 9, 2, 6], realiza as seguintes operações:\n1. Adiciona o número 7 ao fim da lista\n2. Remove o número 1 (primeira ocorrência)\n3. Ordena a lista\n4. As funções append(), remove() e sort() podem ser úteis para estas operações.',
         topic: 'Tipos de Dados Compostos',
         order: 8,
         starterCode: 'numeros = [3, 1, 4, 1, 5, 9, 2, 6]\n\n# Realiza as operações aqui\n'
     },
     {
         title: 'Criar Tuplos',
-        description: 'Cria um tuplo com as coordenadas (x, y, z) = (10, 20, 30). Imprime cada coordenada individualmente. Depois tenta modificar um valor e explica nos comentários o que acontece.',
+        description: 'Cria um tuplo com as coordenadas (x, y, z) = (10, 20, 30). Imprime cada coordenada individualmente. Calcula a norma do vetor representado por este tuplo usando a fórmula (x^2 + y^2 + z^2)^0.5.',
         topic: 'Tipos de Dados Compostos',
         order: 9,
         starterCode: '# Cria o teu tuplo aqui\n'
     },
     {
         title: 'Criar Dicionários',
-        description: 'Cria um dicionário com informações de um aluno: nome, idade e curso. Imprime cada valor individualmente acedendo pela chave.',
+        description: 'Cria um dicionário com informações de um aluno: nome, idade e turma. Imprime cada valor individualmente acedendo pela chave.',
         topic: 'Tipos de Dados Compostos',
         order: 10,
         starterCode: '# Cria o teu dicionário aqui\n'
     },
     {
         title: 'Operações com Dicionários',
-        description: 'Dado o dicionário aluno = {"nome": "Ana", "idade": 17, "curso": "Informática"}, realiza as seguintes operações:\n1. Adiciona a chave "nota" com o valor 18\n2. Atualiza a idade para 18\n3. Remove a chave "curso"\n4. Imprime o dicionário final',
+        description: 'Dado o dicionário aluno = {"nome": "Ana", "idade": 17, "turma": "12ºA"}, realiza as seguintes operações:\n1. Adiciona a chave "nota" com o valor 18\n2. Atualiza a idade para 18 atraves da chave "idade"\n',
         topic: 'Tipos de Dados Compostos',
         order: 11,
-        starterCode: 'aluno = {"nome": "Ana", "idade": 17, "curso": "Informática"}\n\n# Realiza as operações aqui\n'
-    },
-    {
-        title: 'Sets',
-        description: 'Cria dois sets: A = {1, 2, 3, 4, 5} e B = {4, 5, 6, 7, 8}. Calcula e imprime a união, interseção e diferença entre os dois sets.',
-        topic: 'Tipos de Dados Compostos',
-        order: 12,
-        starterCode: 'A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\n\n# Realiza as operações aqui\n'
+        starterCode: 'aluno = {"nome": "Ana", "idade": 17, "turma": "12ºA"}\n\n# Realiza as operações aqui\n'
     },
 
     // Tópico 3 — Estruturas de Controlo
-    {
-        title: 'Estrutura Sequencial',
-        description: 'Escreve um programa que pede ao utilizador o comprimento e a largura de um retângulo e calcula e imprime a área e o perímetro.',
-        topic: 'Estruturas de Controlo',
-        order: 13,
-        starterCode: '# Pede os valores ao utilizador\n'
-    },
     {
         title: 'Seleção Simples',
         description: 'Pede um número ao utilizador e verifica se é positivo. Se for, imprime "O número é positivo.".',
@@ -123,28 +109,56 @@ const challenges = [
         starterCode: '# Pede a nota ao utilizador\n'
     },
     {
-        title: 'Seleção Múltipla',
-        description: 'Pede um número de 1 a 7 ao utilizador e imprime o nome do dia da semana correspondente usando match/case. Se o número não estiver entre 1 e 7, imprime "Número inválido.".',
+        title: 'Ciclo For - Imprimir Números',
+        description: 'Cria um ciclo for para imprimir os números de 1 a 10, um por linha.',
         topic: 'Estruturas de Controlo',
-        order: 17,
-        starterCode: '# Pede o número ao utilizador\n'
+        order: 19,
+        starterCode: '# Usa um ciclo for\n'
     },
     {
-        title: 'Ciclo While',
-        description: 'Usa um ciclo while para imprimir todos os números de 1 a 10 e a sua tabuada de multiplicação por 2.',
-        topic: 'Estruturas de Controlo',
-        order: 18,
-        starterCode: '# Usa um ciclo while\n'
-    },
-    {
-        title: 'Ciclo For',
+        title: 'Ciclo For - Somar Números',
         description: 'Dada a lista numeros = [4, 7, 2, 9, 1, 5, 8, 3, 6], usa um ciclo for para calcular e imprimir a soma de todos os números.',
         topic: 'Estruturas de Controlo',
         order: 19,
         starterCode: 'numeros = [4, 7, 2, 9, 1, 5, 8, 3, 6]\n\n# Usa um ciclo for\n'
     },
     {
-        title: 'Break, Continue e Pass',
+        title: 'Tabuada',
+        description: 'Cria um ciclo for para imprimir a tabuada de um número introduzido pelo utilizador.',
+        topic: 'Estruturas de Controlo',
+        order: 19,
+        starterCode: '# Usa um ciclo for\n'
+    },
+    {
+        title: 'Calcular um fatorial',
+        description: 'Cria um ciclo for para calcular o fatorial de um número introduzido pelo utilizador.',
+        topic: 'Estruturas de Controlo',
+        order: 19,
+        starterCode: '# Usa um ciclo for\n'
+    },
+    {
+        title: 'Desenhar um triangulo de asteriscos',
+        description: 'Cria um ciclo for para desenhar um triângulo de asteriscos.',
+        topic: 'Estruturas de Controlo',
+        order: 19,
+        starterCode: '# Usa um ciclo for\n'
+    },
+    {
+        title: 'Ciclo While',
+        description: 'Cria um programa que pede um número e mostre a contagem até zero',
+        topic: 'Estruturas de Controlo',
+        order: 19,
+        starterCode: '# Usa um ciclo while\n'
+    },
+    {
+        title: 'Validação de palavra-passe',
+        description: 'Cria um programa que proceda à validação da palavra-passe.',
+        topic: 'Estruturas de Controlo',
+        order: 19,
+        starterCode: '# Usa um ciclo while\n'
+    },
+    {
+        title: 'Break',
         description: 'Dada a lista numeros = [3, 7, -2, 5, 1, -8, 4], percorre a lista com um ciclo for e para quando encontrares o primeiro número negativo usando break. Imprime todos os números antes de parar.',
         topic: 'Estruturas de Controlo',
         order: 20,
@@ -152,6 +166,20 @@ const challenges = [
     },
 
     // Tópico 4 — Modularização
+    {
+        title: 'Funções Internas - len()',
+        description: 'Usa a função len() para calcular o comprimento de uma lista. Imprime o resultado.',
+        topic: 'Modularização',
+        order: 21,
+        starterCode: 'lista = [1, 2, 3, 4, 5]\n\n# Calcular o comprimento da lista\n'
+    },
+    {
+        title: 'Funções Internas - range()',
+        description: 'Usa as funções internas do Python para:\n1. Calcular o comprimento de uma lista com len()\n2. Gerar uma sequência de números com range()\n3. Converter uma string em inteiro com int()\n4. Converter um número em string com str()\nImprime o resultado de cada operação.',
+        topic: 'Modularização',
+        order: 21,
+        starterCode: '# Usa as funções internas aqui\n'
+    },
     {
         title: 'Funções Internas',
         description: 'Usa as funções internas do Python para:\n1. Calcular o comprimento de uma lista com len()\n2. Gerar uma sequência de números com range()\n3. Converter uma string em inteiro com int()\n4. Converter um número em string com str()\nImprime o resultado de cada operação.',
