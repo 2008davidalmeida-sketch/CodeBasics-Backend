@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createSubmission, getMySubmissions, getChallengeSubmissions, getAllSubmissions } from '../controllers/submissionController'
-import { verifyToken } from '../middleware/auth'
+import { verifyToken, verifyRole } from '../middleware/auth'
 import { submissionLimiter } from '../middleware/rateLimiter'
 
 const router = Router()
@@ -14,7 +14,7 @@ router.get('/me', verifyToken, getMySubmissions)
 // get submissions for a specific challenge
 router.get('/challenge/:challengeId', verifyToken, getChallengeSubmissions)
 
-// get all submissions
-router.get('/students', verifyToken, getAllSubmissions)
+// get all submissions (teacher only)
+router.get('/', verifyToken, verifyRole('teacher'), getAllSubmissions)
 
 export default router
