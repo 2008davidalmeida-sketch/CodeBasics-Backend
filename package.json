@@ -7,8 +7,9 @@
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "seed": "ts-node src/seed.ts",
-    "seed-submissions": "ts-node src/seedSubmissions.ts"
+    "seed": "ts-node src/dbActions/seed.ts",
+    "seed-submissions": "ts-node src/dbActions/seedSubmissions.ts",
+    "delete-submissions": "ts-node src/dbActions/deleteSubmissions.ts"
   },
   "repository": {
     "type": "git",

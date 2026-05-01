@@ -94,8 +94,6 @@ export async function getChallengeSubmissions(req: AuthRequest, res: Response): 
 export async function getAllSubmissions(req: AuthRequest, res: Response): Promise<void> {
     try {
         const submissions = await Submission.find()
-            .populate('userId', 'name email')
-            .populate('challengeId', 'title topic')
             .sort({ createdAt: -1 })
 
         res.json(submissions)

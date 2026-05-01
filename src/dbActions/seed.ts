@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import mongoose from 'mongoose'
-import Challenge from './models/Challenge'
+import Challenge from '../models/Challenge'
 
 const challenges = [
     // Tópico 1 — Programação

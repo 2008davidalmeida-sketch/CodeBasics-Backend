@@ -8,7 +8,8 @@ import { AuthRequest } from '../middleware/auth'
  */
 export async function getAllStudents(req: AuthRequest, res: Response): Promise<void> {
     try {
-        const students = await User.find({ role: 'student' })
+        // Fetch all students, selecting only necessary fields
+        const students = await User.find()
             .select('id name email photo role createdAt')
             .sort({ name: 1 })
 

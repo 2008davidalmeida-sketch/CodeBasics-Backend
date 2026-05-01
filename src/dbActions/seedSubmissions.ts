@@ -2,8 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import mongoose from 'mongoose'
-import Challenge from './models/Challenge'
-import Submission from './models/Submission'
+import Challenge from '../models/Challenge'
+import Submission from '../models/Submission'
 
 async function seedSubmissions() {
   try {
