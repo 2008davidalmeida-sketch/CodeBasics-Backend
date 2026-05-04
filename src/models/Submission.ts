@@ -1,24 +1,30 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 export interface ISubmission extends Document {
-  userId: mongoose.Types.ObjectId
-  challengeId: mongoose.Types.ObjectId
-  code: string
-  feedback: string
-  passed: boolean
-  createdAt: Date
-  updatedAt: Date
+    userId: mongoose.Types.ObjectId
+    challengeId: mongoose.Types.ObjectId
+    code: string
+    feedback?: string
+    passed?: boolean
+    status: 'pending' | 'processing' | 'completed' | 'failed'
+    createdAt: Date
+    updatedAt: Date
 }
 
 const SubmissionSchema = new Schema<ISubmission>(
-  {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    challengeId: { type: Schema.Types.ObjectId, ref: 'Challenge', required: true },
-    code: { type: String, required: true },
-    feedback: { type: String, required: true },
-    passed: { type: Boolean, default: false },
-  },
-  { timestamps: true }
+    {
+        userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        challengeId: { type: Schema.Types.ObjectId, ref: 'Challenge', required: true },
+        code: { type: String, required: true },
+        feedback: { type: String },
+        passed: { type: Boolean },
+        status: { 
+            type: String, 
+            enum: ['pending', 'processing', 'completed', 'failed'], 
+            default: 'pending' 
+        },
+    },
+    { timestamps: true }
 )
 
 SubmissionSchema.index({ userId: 1, challengeId: 1 })

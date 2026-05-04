@@ -1,12 +1,18 @@
 import { Router } from 'express'
-import { createSubmission, getMySubmissions, getChallengeSubmissions, getAllSubmissions } from '../controllers/submissionController'
+import { createSubmission, getMySubmissions, getChallengeSubmissions, getAllSubmissions, getSubmission } from '../controllers/submissionController'
 import { verifyToken, verifyRole } from '../middleware/auth'
 import { submissionLimiter } from '../middleware/rateLimiter'
+import { validate } from '../middleware/validate'
+import { createSubmissionSchema } from '../validations/submissionValidation'
 
 const router = Router()
 
 // submit code and get AI feedback
-router.post('/', verifyToken, submissionLimiter, createSubmission)
+router.post('/', verifyToken, submissionLimiter, validate(createSubmissionSchema), createSubmission)
+
+// get a single submission by ID
+router.get('/:id', verifyToken, getSubmission)
+
 
 // get all submissions for the logged in student
 router.get('/me', verifyToken, getMySubmissions)

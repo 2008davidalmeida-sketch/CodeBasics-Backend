@@ -1,31 +1,13 @@
 import { Response } from 'express'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import Submission from '../models/Submission'
 import Challenge from '../models/Challenge'
 import { AuthRequest } from '../middleware/auth'
-import { REVIEW_SYSTEM_PROMPT } from '../config/prompts'
+import { submissionQueue } from '../queues/submissionQueue'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string)
 
 // submit code and get AI feedback
 export async function createSubmission(req: AuthRequest, res: Response): Promise<void> {
     const { challengeId, code } = req.body
-
-    // validate input
-    if (!challengeId || typeof challengeId !== 'string') {
-        res.status(400).json({ error: 'Valid challengeId is required' })
-        return
-    }
-
-    if (!code || typeof code !== 'string' || code.trim() === '') {
-        res.status(400).json({ error: 'Code is required' })
-        return
-    }
-
-    if (code.length > 50000) {
-        res.status(400).json({ error: 'Code submission exceeds maximum length of 50,000 characters' })
-        return
-    }
 
     // check if challenge exists
     const challenge = await Challenge.findById(challengeId)
@@ -35,49 +17,28 @@ export async function createSubmission(req: AuthRequest, res: Response): Promise
     }
 
     try {
-        // build the prompt
-        const prompt = `
-Challenge: ${challenge.title}
-Description: ${challenge.description}
-
-Student code:
-\`\`\`python
-${code}
-\`\`\`
-        `
-
-        // call Gemini API
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash-lite',
-            systemInstruction: REVIEW_SYSTEM_PROMPT
-        })
-
-        const result = await model.generateContent(prompt)
-        const raw = result.response.text()
-
-        // strip markdown backticks if Gemini wraps the response
-        const cleaned = raw.replace(/```json|```/g, '').trim()
-
-        // parse structured response
-        const parsed = JSON.parse(cleaned)
-        const feedback = parsed.feedback
-        const passed = parsed.passed === true
-
-        // save submission to database
+        // save submission to database as pending
         const submission = await Submission.create({
             userId: req.userId,
             challengeId,
             code,
-            feedback,
-            passed
+            status: 'pending'
+        })
+
+        // add job to the queue
+        await submissionQueue.add('evaluate-submission', {
+            submissionId: submission._id,
+            challengeId,
+            code
         })
 
         res.status(201).json(submission)
     } catch (error) {
-        console.error('Gemini error:', error)
-        res.status(500).json({ error: 'Failed to get AI feedback' })
+        console.error('Submission error:', error)
+        res.status(500).json({ error: 'Failed to process submission' })
     }
 }
+
 
 // get all submissions for the logged in student
 export async function getMySubmissions(req: AuthRequest, res: Response): Promise<void> {
@@ -166,5 +127,29 @@ export async function getAllSubmissions(req: AuthRequest, res: Response): Promis
         })
     } catch {
         res.status(500).json({ error: 'Failed to fetch submissions' })
+    }
+}
+
+// get a single submission by ID
+export async function getSubmission(req: AuthRequest, res: Response): Promise<void> {
+    try {
+        // 
+        const submission = await Submission.findById(req.params.id)
+            .populate('challengeId', 'title topic order')
+
+        if (!submission) {
+            res.status(404).json({ error: 'Submission not found' })
+            return
+        }
+
+        // Only the user who created it or a teacher can view it
+        if (submission.userId.toString() !== req.userId && req.userRole !== 'teacher') {
+            res.status(403).json({ error: 'Not authorized to view this submission' })
+            return
+        }
+
+        res.json(submission)
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch submission' })
     }
 }

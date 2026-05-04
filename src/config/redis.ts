@@ -6,7 +6,10 @@ dotenv.config();
 // redis connection 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
-const redis = new Redis(redisUrl);
+const redis = new Redis(redisUrl, {
+    maxRetriesPerRequest: null
+});
+
 
 redis.on('connect', () => {
     console.log('Connected to Redis');
