@@ -34,7 +34,7 @@ export function createChallenge(req: AuthRequest, res: Response): void {
         return
     }
 
-     // validate types
+    // validate types
     if (typeof title !== 'string' || typeof description !== 'string' || typeof topic !== 'string') {
         res.status(400).json({ error: 'title, description and topic must be strings' })
         return
