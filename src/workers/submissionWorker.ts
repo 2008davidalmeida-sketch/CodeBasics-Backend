@@ -76,12 +76,13 @@ ${code}
     }
 );
 
+// Event listeners for debugging
 submissionWorker.on('completed', (job) => {
     console.log(`Job ${job.id} has completed!`);
 });
 
 submissionWorker.on('failed', (job, err) => {
-    console.log(`Job ${job?.id} has failed with ${err.message}`);
+    console.error(`Job ${job?.id} has failed with ${err.message}`);
 });
 
 console.log('Submission Worker initialized');

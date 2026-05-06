@@ -39,6 +39,29 @@ export async function createSubmission(req: AuthRequest, res: Response): Promise
     }
 }
 
+// delete submission
+export async function deleteSubmission(req: AuthRequest, res: Response): Promise<void> {
+    try {
+        const submission = await Submission.findById(req.params.id)
+        if (!submission) {
+            res.status(404).json({ error: 'Submission not found' })
+            return
+        }
+
+        // Only the user who created it or a teacher can delete it
+        if (submission.userId.toString() !== req.userId && req.userRole !== 'teacher') {
+            res.status(403).json({ error: 'Not authorized to delete this submission' })
+            return
+        }
+
+        await submission.deleteOne()
+        console.log('Submission with ID ' + req.params.id + ' deleted successfully')
+        res.json({ message: 'Submission deleted successfully' })
+    } catch (error) {
+        console.error('Error in deleteSubmission:', error)
+        res.status(500).json({ error: 'Failed to delete submission' })
+    }
+}
 
 // get all submissions for the logged in student
 export async function getMySubmissions(req: AuthRequest, res: Response): Promise<void> {
@@ -64,7 +87,8 @@ export async function getMySubmissions(req: AuthRequest, res: Response): Promise
                 pages: Math.ceil(total / limit)
             }
         })
-    } catch {
+    } catch (error) {
+        console.error('Error in getMySubmissions:', error)
         res.status(500).json({ error: 'Failed to fetch submissions' })
     }
 }

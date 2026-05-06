@@ -27,9 +27,8 @@ const SubmissionSchema = new Schema<ISubmission>(
     { timestamps: true }
 )
 
+//Indexes for scalability
 SubmissionSchema.index({ userId: 1, challengeId: 1 })
-
-// Sorting indexes for scalability
 SubmissionSchema.index({ userId: 1, createdAt: -1 })
 SubmissionSchema.index({ challengeId: 1, createdAt: -1 })
 SubmissionSchema.index({ createdAt: -1 })

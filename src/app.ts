@@ -30,4 +30,25 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' })
 })
 
+// Error handling middleware
+app.use((err: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    // determines status code
+    const status = typeof err === 'object' && err !== null && 'status' in err 
+        ? (err as { status: number }).status 
+        : 500
+
+    // determines error message
+    const message = status >= 500 ? 'Internal Server Error' : (err instanceof Error ? err.message : 'An error occurred');
+  
+    // Log only non-sensitive error details in production
+    console.error('GLOBAL ERROR:', { 
+        message: err instanceof Error ? err.message : String(err),
+        path: req.path,
+        method: req.method
+    });
+
+    res.status(status).json({ error: message });
+});
+
 export default app
+ 
