@@ -29,6 +29,8 @@ COPY --from=builder /app/dist ./dist
 # Use the non-root node user for security
 USER node
 
+# Expose the port the app runs on
 EXPOSE 5000
 
-CMD ["node", "dist/server.js"]
+# Run the server
+CMD ["node", "dist/server.js"]
