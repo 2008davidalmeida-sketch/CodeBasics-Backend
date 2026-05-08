@@ -15,7 +15,7 @@ async function connectDB(): Promise<void> {
         console.log(`MongoDB connected: ${conn.connection.host}`)
     } catch (error) {
         console.error('MongoDB connection error:', error)
-        // If initial connection fails, we exit
+        // If initial connection fails, exit
         process.exit(1)
     }
 
