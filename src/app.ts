@@ -8,6 +8,7 @@ import authRoutes from './routes/auth'
 import challengeRoutes from './routes/challenges'
 import submissionRoutes from './routes/submissions'
 import userRoutes from './routes/users'
+import turmaRoutes from './routes/turmas'
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use('/auth', authRoutes)
 app.use('/challenges', challengeRoutes)
 app.use('/submissions', submissionRoutes)
 app.use('/users', userRoutes)
+app.use('/turmas', turmaRoutes)
 
 // health check
 app.get('/health', (req, res) => {

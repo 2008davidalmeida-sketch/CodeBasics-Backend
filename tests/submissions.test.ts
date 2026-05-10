@@ -21,6 +21,14 @@ jest.mock('@google/generative-ai', () => {
     };
 });
 
+// Mock the submission queue to prevent BullMQ/ioredis-mock errors
+jest.mock('../src/queues/submissionQueue', () => ({
+    submissionQueue: {
+        add: jest.fn().mockResolvedValue({ id: 'mock-job-id' })
+    }
+}));
+
+
 describe('Submissions API', () => {
     let studentToken: string;
     let teacherToken: string;
@@ -67,15 +75,15 @@ describe('Submissions API', () => {
         expect(response.status).toBe(401);
     });
 
-    it('should create a submission and return mocked AI feedback', async () => {
+    it('should create a submission and return pending status', async () => {
         const response = await request(app)
             .post('/submissions')
             .set('Authorization', `Bearer ${studentToken}`)
             .send({ challengeId, code: 'print("hello")' });
 
         expect(response.status).toBe(201);
-        expect(response.body.feedback).toBe('Great job!');
-        expect(response.body.passed).toBe(true);
+        expect(response.body.status).toBe('pending');
+        expect(response.body.code).toBe('print("hello")');
     });
 
     it('should fetch user submissions', async () => {

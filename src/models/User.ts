@@ -6,6 +6,7 @@ export interface IUser extends Document {
     photo?: string
     googleId: string
     role: 'student' | 'teacher'
+    turmas: mongoose.Types.ObjectId[]
     createdAt: Date
     updatedAt: Date
 }
@@ -17,6 +18,7 @@ const UserSchema = new Schema<IUser>(
         photo: { type: String },
         googleId: { type: String, required: true, unique: true },
         role: { type: String, enum: ['student', 'teacher'], default: 'student' },
+        turmas: { type: [Schema.Types.ObjectId], ref: 'Turma', default: [] },
     },
     { timestamps: true }
 )
