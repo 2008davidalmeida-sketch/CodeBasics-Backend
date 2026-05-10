@@ -171,10 +171,14 @@ describe('Turmas API', () => {
             expect(response.status).toBe(200);
             expect(Array.isArray(response.body)).toBe(true);
             expect(response.body.length).toBe(2);
-            expect(response.body.map(t => t.name)).toEqual(
+            expect(response.body.map((t: any) => t.name)).toEqual(
                 expect.arrayContaining(['Class A', 'Class B'])
             );
         });
+    });
+
+    describe('GET /turmas/:id', () => {
+        let turmaId: string;
 
         beforeEach(async () => {
             const turma = await Turma.create({
