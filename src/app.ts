@@ -55,4 +55,4 @@ app.use((err: unknown, req: express.Request, res: express.Response, next: expres
     res.status(status).json({ error: message });
 });
 
- 
+export default app
