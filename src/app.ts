@@ -12,6 +12,9 @@ import turmaRoutes from './routes/turmas'
 
 const app = express()
 
+// Trust Render's proxy to ensure HTTPS is used in redirects
+app.set('trust proxy', 1)
+
 // middleware
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -52,5 +55,4 @@ app.use((err: unknown, req: express.Request, res: express.Response, next: expres
     res.status(status).json({ error: message });
 });
 
-export default app
  
