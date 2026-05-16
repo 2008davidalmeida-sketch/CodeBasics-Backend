@@ -6,6 +6,14 @@ import Challenge from '../models/Challenge'
 import Submission from '../models/Submission'
 
 async function seedSubmissions() {
+  const userIdArg = process.argv[2]
+
+  if (!userIdArg) {
+    console.error('Por favor, forneça um User ID como argumento.')
+    console.log('Exemplo: npx ts-node src/dbActions/seedSubmissions.ts 69ef586e7e788ff1d80cbaf9')
+    process.exit(1)
+  }
+
   try {
     await mongoose.connect(process.env.MONGO_URI as string)
 
@@ -17,15 +25,13 @@ async function seedSubmissions() {
       process.exit(1)
     }
 
-    // Clear existing submissions
-    await Submission.deleteMany({})
-
-    // Create a test user ID (use existing or create new)
-    const testUserId = new mongoose.Types.ObjectId()
+    // Clear existing submissions for this user
+    const deleteResult = await Submission.deleteMany({ userId: new mongoose.Types.ObjectId(userIdArg) })
+    console.log(`Deleted ${deleteResult.deletedCount} existing submissions for user ${userIdArg}`)
 
     // Create a submission for each challenge with passed: true
     const submissions = challenges.map(challenge => ({
-      userId: new mongoose.Types.ObjectId('69ef586e7e788ff1d80cbaf9'),
+      userId: new mongoose.Types.ObjectId(userIdArg),
       challengeId: challenge._id,
       code: '# Solution for ' + challenge.title + '\nprint("Completed")',
       feedback: 'Correct solution!',
@@ -34,7 +40,7 @@ async function seedSubmissions() {
 
     await Submission.insertMany(submissions)
 
-    console.log(`Created ${submissions.length} submissions with passed: true`)
+    console.log(`Created ${submissions.length} submissions with passed: true for user ${userIdArg}`)
     process.exit(0)
   } catch (error) {
     console.error('Seed error:', error)
