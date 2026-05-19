@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import passport from '../config/passport'
 import { handleGoogleCallback, getMe, logout } from '../controllers/authController'
+import { verifyToken } from '../middleware/auth'
 
 const router = Router()
 
@@ -31,7 +32,7 @@ router.get(
 )
 
 // Get current user route
-router.get('/me', getMe)
+router.get('/me', verifyToken, getMe)
 
 // Logout route
 router.post('/logout', logout)

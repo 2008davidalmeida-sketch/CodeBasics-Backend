@@ -9,6 +9,7 @@ import challengeRoutes from './routes/challenges'
 import submissionRoutes from './routes/submissions'
 import userRoutes from './routes/users'
 import turmaRoutes from './routes/turmas'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -16,12 +17,14 @@ const app = express()
 app.set('trust proxy', 1)
 
 // middleware
+app.use(cookieParser())
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
 }))
 app.use(express.json({ limit: '100kb' }))
 app.use(passport.initialize())
+
 
 // routes
 app.use('/auth', authRoutes)

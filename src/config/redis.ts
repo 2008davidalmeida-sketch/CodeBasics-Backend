@@ -15,9 +15,12 @@ const redisOptions: any = {
 if (redisUrl.startsWith('rediss://')) {
     // Avoid IPv6 resolution timeouts on Render
     redisOptions.family = 0;
-    
-    // Bypass strict unauthorized checks if required
-    redisOptions.tls = { rejectUnauthorized: false };
+
+    // Disable TLS verification in development for local Redis
+    // Enable strict TLS in production (Upstash requires this)
+    redisOptions.tls = {
+        rejectUnauthorized: process.env.NODE_ENV === 'production'
+    };
 }
 
 // Initialize redis

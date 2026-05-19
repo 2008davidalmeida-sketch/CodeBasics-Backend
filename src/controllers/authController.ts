@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { IUser } from '../models/User'
+import User from '../models/User'
+import { AuthRequest } from '../middleware/auth'
 
 
 export function handleGoogleCallback(req: Request, res: Response): void {
-    console.log('handleGoogleCallback called')
-    console.log('req.user:', req.user)
     const user = req.user as IUser
     
     // Generate JWT token
@@ -15,40 +15,32 @@ export function handleGoogleCallback(req: Request, res: Response): void {
         { expiresIn: '7d' }
     )
 
-    const redirectUrl = `${process.env.CLIENT_URL}/auth/callback?token=${token}`
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    })
 
-    // Redirect to client with token
-    res.redirect(redirectUrl)
+    res.redirect(`${process.env.CLIENT_URL}/auth/callback`)
 }
- 
-import User from '../models/User'
+
+
 
 export function getMe(req: Request, res: Response): void {
-    const authHeader = req.headers.authorization
+    const authReq = req as AuthRequest
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(401).json({ error: 'No token provided' })
-        return
-    }
-
-    const token = authHeader.split(' ')[1]
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string }
-        
-        // Fetch full user from database
-        User.findById(decoded.id).then(user => {
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' })
-            }
-            res.json(user)
-        }).catch(err => {
-            res.status(500).json({ error: 'Database error' })
-        })
-    } catch (error) {
-        res.status(401).json({ error: 'Invalid token' })
-    }
+    // Since verifyToken middleware ran, authReq.userId is guaranteed to exist and be valid
+    User.findById(authReq.userId).then(user => {
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+        res.json(user)
+    }).catch(err => {
+        res.status(500).json({ error: 'Database error' })
+    })
 }
+
 
 export function logout(req: Request, res: Response): void {
     res.clearCookie('token')

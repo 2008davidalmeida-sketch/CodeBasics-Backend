@@ -11,13 +11,9 @@ passport.use(
         proxy: true,
         },
         async (accessToken, refreshToken, profile, done) => {
-            console.log('Passport strategy running')
             try {
                 // get email from profile
                 const email = profile.emails?.[0].value
-                console.log('Email:', email)
-                console.log('Domain check:', email?.endsWith(process.env.ALLOWED_EMAIL_DOMAIN as string))
-                console.log('ALLOWED_EMAIL_DOMAIN:', process.env.ALLOWED_EMAIL_DOMAIN)
 
                 // check if email is valid
                 if (!email || !email.endsWith(process.env.ALLOWED_EMAIL_DOMAIN as string)) {
