@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import { getChallenges, getChallenge, createChallenge, updateChallenge, deleteChallenge } from '../controllers/challengeController'
 import { verifyToken, verifyRole } from '../middleware/auth'
+import { publicLimiter } from '../middleware/rateLimiter'
 
 const router = Router()
 
 // get all challenges
-router.get('/', getChallenges)
+router.get('/', publicLimiter, getChallenges)
 // get a single challenge
-router.get('/:id', getChallenge)
+router.get('/:id', publicLimiter, getChallenge)
 
 // create a new challenge
 router.post('/', verifyToken, verifyRole('teacher'), createChallenge)

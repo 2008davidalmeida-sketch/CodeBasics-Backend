@@ -2,6 +2,7 @@ import { Router } from 'express'
 import passport from '../config/passport'
 import { handleGoogleCallback, getMe, logout } from '../controllers/authController'
 import { verifyToken } from '../middleware/auth'
+import { publicLimiter } from '../middleware/rateLimiter'
 
 const router = Router()
 
@@ -17,7 +18,7 @@ const processGoogleCallback = passport.authenticate('google', {
 })
 
 // get current user info
-router.get('/google', redirectToGoogle)
+router.get('/google',publicLimiter, redirectToGoogle)
 
 // handle Google callback and redirect to client with token
 router.get(

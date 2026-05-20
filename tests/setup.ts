@@ -34,6 +34,7 @@ jest.mock('ioredis', () => require('ioredis-mock'));
 // Mock the rate limiter middleware so it doesn't fail during tests due to missing Redis features
 jest.mock('../src/middleware/rateLimiter', () => {
   return {
-    submissionLimiter: (req: any, res: any, next: any) => next()
+    submissionLimiter: (req: any, res: any, next: any) => next(),
+    publicLimiter: (req: any, res: any, next: any) => next()
   };
 });
