@@ -28,10 +28,6 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const allowedOrigins = [
-    process.env.CLIENT_URL
-]
-
 // middleware
 app.use(helmet())
 app.use(helmet.strictTransportSecurity({ maxAge: 31536000, includeSubDomains: true }))
@@ -44,6 +40,11 @@ app.use(helmet.contentSecurityPolicy({
     }
 }))
 app.use(cookieParser())
+
+const allowedOrigins = [
+    process.env.CLIENT_URL
+]
+
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
