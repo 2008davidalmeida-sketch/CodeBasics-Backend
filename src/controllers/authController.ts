@@ -15,6 +15,7 @@ export function handleGoogleCallback(req: Request, res: Response): void {
         { expiresIn: '7d' }
     )
 
+    // For same-domain: also set as httpOnly cookie as fallback
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -22,7 +23,9 @@ export function handleGoogleCallback(req: Request, res: Response): void {
         maxAge: 7 * 24 * 60 * 60 * 1000
     })
 
-    res.redirect(`${process.env.CLIENT_URL}/auth/callback`)
+    // Pass token in redirect URL for cross-domain frontend
+    // Frontend will extract and store in localStorage/sessionStorage
+    res.redirect(`${process.env.CLIENT_URL}/auth/callback?token=${token}`)
 }
 
 
