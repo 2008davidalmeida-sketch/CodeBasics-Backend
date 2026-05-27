@@ -29,7 +29,6 @@ export function handleGoogleCallback(req: Request, res: Response): void {
 }
 
 
-
 export function getMe(req: Request, res: Response): void {
     const authReq = req as AuthRequest
     
