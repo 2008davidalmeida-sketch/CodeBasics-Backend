@@ -10,9 +10,10 @@ export const publicLimiter = rateLimit({
     message: { error: 'Muitos pedidos. Tenta novamente mais tarde.' },
     standardHeaders: 'draft-8',
     legacyHeaders: false,
+    passOnStoreError: true,
     store: new RedisStore({
-        // @ts-expect-error - Known issue: ioredis and rate-limit-redis type mismatch
-        sendCommand: (...args: string[]) => redis.call(...args),
+        sendCommand: (command: string, ...args: string[]) =>
+            redis.call(command, ...args) as any,
     }),
 })
 
@@ -24,8 +25,9 @@ export const submissionLimiter = rateLimit({
     message: { error: 'Demasiadas submissões. Tenta novamente mais tarde.' },
     standardHeaders: 'draft-8',
     legacyHeaders: false,
+    passOnStoreError: true,
     store: new RedisStore({
-        // @ts-expect-error - Known issue: ioredis and rate-limit-redis type mismatch
-        sendCommand: (...args: string[]) => redis.call(...args),
+        sendCommand: (command: string, ...args: string[]) =>
+            redis.call(command, ...args) as any,
     }),
 })
