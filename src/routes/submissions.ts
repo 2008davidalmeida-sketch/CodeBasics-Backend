@@ -11,7 +11,7 @@ const router = Router()
 router.post('/', verifyToken, submissionLimiter, validate(createSubmissionSchema), createSubmission)
 
 // delete submission
-router.delete('/:id', verifyToken, verifyRole('teacher'), deleteSubmission)
+router.delete('/:id', verifyToken, deleteSubmission)
 
 // get all submissions for the logged in student
 router.get('/me', verifyToken, getMySubmissions)
